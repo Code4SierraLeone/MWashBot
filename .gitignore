@@ -1,11 +1,6 @@
 .DS_Store
-
-/vendor/
-
-# IDE Files
-#-------------------------
-/nbproject/
 .idea/*
+/vendor/
 
 ## Sublime Text cache files
 *.tmlanguage.cache

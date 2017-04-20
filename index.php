@@ -131,7 +131,7 @@ function processMessage($message) {
     $text = $message['text'];
 
     //show action (MwashBot is typing...)
-    $this->apiRequest("sendChatAction", array('chat_id' => $chat_id, "action" => 'typing'));
+    apiRequest("sendChatAction", array('chat_id' => $chat_id, "action" => 'typing'));
 
     if (isset($text)) {
 
