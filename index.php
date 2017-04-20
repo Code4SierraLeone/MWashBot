@@ -137,22 +137,26 @@ function processMessage($message) {
 
         if ($text === "/start") {
 
-            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Hi, Welcome to MWashBot. Please select what you would like to do by selecting one of the options below.', 'reply_markup' => array(
+            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Hi, Welcome to MWash Bot. Please select what you would like to do by selecting one of the options below.', 'reply_markup' => array(
                 'keyboard' => array(array('Search Water Point'),array('Update Water Point'),array('Subscribe')),
                 'one_time_keyboard' => true,
                 'resize_keyboard' => true)));
 
         } else if ($text === "Search Water Point") {
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Searching Water Points kinda closer'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide Water Point ID by typing the word "WP" followed by the ID i.e WP50'));
 
         } else if ($text === "Update Water Point") {
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Update Water Point" kinda closer'));
+            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'You will only be able to update only some few attributes. Select which attribute you want to update from the options below.', 'reply_markup' => array(
+                'keyboard' => array(array('Water Source Mechanic'),array('Manager','Chlorinated Water'),array('Water Source Quality')),
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true)));
 
         } else if ($text === "Subscribe") {
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Subscribe kinda closer'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will provide you with updates about the condition of the water points around your area.'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
         }
 
