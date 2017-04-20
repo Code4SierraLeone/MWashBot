@@ -92,7 +92,7 @@ function apiRequest($method, $parameters) {
     curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 5);
     curl_setopt($handle, CURLOPT_TIMEOUT, 60);
 
-    return $this->exec_curl_request($handle);
+    return exec_curl_request($handle);
 
 }
 
@@ -153,7 +153,7 @@ function processMessage($message) {
     }
 
 
-    }
+}
 
 define('WEBHOOK_URL', 'https://mwashbot.herokuapp.com/index.php');
 //https://api.telegram.org/bot343768089:AAHmS2wolDVlghf5IorunK0nFaCAC6G9N64/setWebhook?url=https://mwashbot.herokuapp.com/index.php
