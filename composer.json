@@ -1,0 +1,9 @@
+{
+	"description": "experimental bot",
+	"name": "mwashbot",
+	"type": "project",
+	"license": "MIT",
+	"require": {
+		"php": ">=7.0"
+	}
+}
