@@ -135,21 +135,34 @@ function processMessage($message) {
 
     if (isset($text)) {
 
-    if ($text === "/start") {
+        if ($text === "/start") {
 
-        apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'At least am working..'));
+            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Hi, Welcome to MWashBot. Please select what you would like to do by selecting one of the options below.', 'reply_markup' => array(
+                'keyboard' => array(array('Search Water Point'),array('Update Water Point'),array('Subscribe')),
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true)));
 
-    } else {
+        } else if ($text === "Search Water Point") {
 
-        apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'We aint there yet'));
-    }
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Searching Water Points kinda closer'));
+
+        } else if ($text === "Update Water Point") {
+
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Update Water Point" kinda closer'));
+
+        } else if ($text === "Subscribe") {
+
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Subscribe kinda closer'));
+
+        }
 
     } else {
 
         apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'I understand only text messages', 'reply_markup' => array(
-    'keyboard' => array(array('/start')),
-    'one_time_keyboard' => true,
-    'resize_keyboard' => true)));
+        'keyboard' => array(array('/start')),
+        'one_time_keyboard' => true,
+        'resize_keyboard' => true)));
+
     }
 
 
