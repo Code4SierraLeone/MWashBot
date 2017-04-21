@@ -1,6 +1,6 @@
 {
-	"description": "experimental bot",
-	"name": "mwashbot",
+	"name": "MWashBot",
+	"description": "A Telegram Bot Extension For MWash",
 	"type": "project",
 	"license": "MIT",
 	"require": {

@@ -158,6 +158,12 @@ function processMessage($message) {
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will provide you with updates about the condition of the water points around your area.'));
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
+        } else if (strpos($text, "WP") !== false) {
+
+
+        } else if (strpos($text, "SP") !== false) {
+
+
         }
 
     } else {
