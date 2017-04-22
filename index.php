@@ -158,7 +158,7 @@ function processMessage($message) {
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will provide you with updates about the condition of the water points around your area.'));
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
-        } else if (strpos($text, "WP") !== false) {
+        } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false) {
 
             $wpid = ltrim($text,'WP');
 
@@ -175,17 +175,41 @@ function processMessage($message) {
             $chlorine = json_encode($result->getRows()[0][4]);
             $qual = json_encode($result->getRows()[0][5]);
 
+            if (trim($mechanic, '"') == 'Yes'){
+                $mech_ans = 'The mechanic is available near the water point to attend to any issue';
+            } else {
+                $mech_ans = 'Unfortunately there is no mechanic to attend to any issue during failure';
+            }
+
+            if (trim($chlorine, '"') == 'Yes') {
+                $chlo_ans = 'and the water is chlorinated.';
+            } else if (trim($chlorine, '"') == 'No') {
+                $chlo_ans = 'and the water is not chlorinated.';
+            } else if (trim($chlorine, '"') == 'Unknown') {
+                $chlo_ans = 'and no available information is provided about water chlorination.';
+            } else {
+                $chlo_ans = 'and no available information is provided about water chlorination.';
+            }
+
+            if (trim($qual, '"') == 'Clean (good smell- taste and color)') {
+                $qual_ans = 'The water is clean by the standards of good smell, good taste and color.';
+            } else if (trim($qual, '"') == 'Not clean') {
+                $qual_ans = 'The water is not clean by any standards.';
+            } else {
+                $qual_ans = 'Apparently the information about the water quality is not available.';
+            }
+
             apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
-                "text" => 'The water point is located in .' .trim($district, '"'). ' district in' .trim($province, '"'). ' province.'
+                "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .$manager. ' ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
             ));
 
 
-        } else if (strpos($text, "SP") !== false) {
+        } else if (strpos($text, "SP") !== false || strpos($text, "sp") !== false) {
 
             $wpid = ltrim($text,'SP');
 
-            include 'fusion_client.php';
+            //include 'fusion_client.php';
 
         }
 
