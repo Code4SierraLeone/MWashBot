@@ -144,7 +144,7 @@ function processMessage($message) {
 
         } else if ($text === "Search Water Point") {
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide Water Point ID by typing the word "WP" followed by the ID i.e WP50'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "WP" followed by the ID i.e WP50'));
 
         } else if ($text === "Update Water Point") {
 
@@ -156,13 +156,36 @@ function processMessage($message) {
         } else if ($text === "Subscribe") {
 
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will provide you with updates about the condition of the water points around your area.'));
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
         } else if (strpos($text, "WP") !== false) {
+
+            $wpid = ltrim($text,'WP');
+
+            include 'fusion_client.php';
+
+            $selectQuery = "SELECT district,province,mechanic,manager,chlorine,qual FROM 1aHLU3Qqsl9X_W_BEvZaPn_dkNV8UtXtJPnKedgKB where cartodb_id = ".$wpid;
+
+            $result = $service->query->sql($selectQuery);
+
+            $district = json_encode($result->getRows()[0][0]);
+            $province = json_encode($result->getRows()[0][1]);
+            $mechanic = json_encode($result->getRows()[0][2]);
+            $manager = json_encode($result->getRows()[0][3]);
+            $chlorine = json_encode($result->getRows()[0][4]);
+            $qual = json_encode($result->getRows()[0][5]);
+
+            apiRequest("sendMessage", array(
+                'chat_id' => $chat_id,
+                "text" => 'The water point is located in .' .trim($district, '"'). ' district in' .trim($province, '"'). ' province.'
+            ));
 
 
         } else if (strpos($text, "SP") !== false) {
 
+            $wpid = ltrim($text,'SP');
+
+            include 'fusion_client.php';
 
         }
 
