@@ -160,7 +160,9 @@ function processMessage($message) {
 
         } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false) {
 
-            $wpid = ltrim($text,'WP');
+            $text_lc = strtolower($text);
+
+            $wpid = ltrim($text_lc,'wp');
 
             include 'fusion_client.php';
 
@@ -201,7 +203,7 @@ function processMessage($message) {
 
             apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
-                "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .$manager. ' ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
+                "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
             ));
 
 
