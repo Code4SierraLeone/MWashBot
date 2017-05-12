@@ -211,7 +211,7 @@ function processMessage($message) {
 
             $wpid = ltrim($text,'SP');
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => ' '.$wpid.' '));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => $wpid));
 
         }
 
