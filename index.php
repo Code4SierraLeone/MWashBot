@@ -14,7 +14,7 @@ function apiRequestWebhook($method, $parameters) {
     if (!$parameters) {
 
         $parameters = array();
-        } else if (!is_array($parameters)) {
+    } else if (!is_array($parameters)) {
         error_log("Parameters must be an array\n");
         return false;
 
@@ -155,7 +155,7 @@ function processMessage($message) {
 
         } else if ($text === "Subscribe") {
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will provide you with updates about the condition of the water points around your area.'));
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Mwash Bot will update you about the condition of the water points around your area.'));
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
         } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false) {
@@ -211,7 +211,7 @@ function processMessage($message) {
 
             $wpid = ltrim($text,'SP');
 
-            //include 'fusion_client.php';
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => ' '.$wpid.' '));
 
         }
 
