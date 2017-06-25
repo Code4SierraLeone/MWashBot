@@ -1,13 +1,13 @@
 <?php
 
-define('BOT_TOKEN', '343768089:AAHmS2wolDVlghf5IorunK0nFaCAC6G9N64');
+define('BOT_TOKEN', ''); //!IMPORTANT add Bot Token Here
 define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
 function apiRequestWebhook($method, $parameters) {
 
     if (!is_string($method)) {
-    error_log("Method name must be a string\n");
-    return false;
+        error_log("Method name must be a string\n");
+        return false;
 
     }
 
@@ -32,11 +32,11 @@ function exec_curl_request($handle) {
     $response = curl_exec($handle);
 
     if ($response === false) {
-    $errno = curl_errno($handle);
-    $error = curl_error($handle);
-    error_log("Curl returned error $errno: $error\n");
-    curl_close($handle);
-    return false;
+        $errno = curl_errno($handle);
+        $error = curl_error($handle);
+        error_log("Curl returned error $errno: $error\n");
+        curl_close($handle);
+        return false;
 
     }
 
@@ -44,22 +44,22 @@ function exec_curl_request($handle) {
     curl_close($handle);
 
     if ($http_code >= 500) {
-    // do not wat to DDOS server if something goes wrong
-    sleep(10);
-    return false;
+        // do not wat to DDOS server if something goes wrong
+        sleep(10);
+        return false;
     } else if ($http_code != 200) {
-    $response = json_decode($response, true);
-    error_log("Request has failed with error {$response['error_code']}: {$response['description']}\n");
-    if ($http_code == 401) {
-    throw new Exception('Invalid access token provided');
-    }
-    return false;
+        $response = json_decode($response, true);
+        error_log("Request has failed with error {$response['error_code']}: {$response['description']}\n");
+        if ($http_code == 401) {
+            throw new Exception('Invalid access token provided');
+        }
+        return false;
     } else {
-    $response = json_decode($response, true);
-    if (isset($response['description'])) {
-    error_log("Request was successfull: {$response['description']}\n");
-    }
-    $response = $response['result'];
+        $response = json_decode($response, true);
+        if (isset($response['description'])) {
+            error_log("Request was successfull: {$response['description']}\n");
+        }
+        $response = $response['result'];
     }
 
     return $response;
@@ -68,22 +68,22 @@ function exec_curl_request($handle) {
 function apiRequest($method, $parameters) {
 
     if (!is_string($method)) {
-    error_log("Method name must be a string\n");
-    return false;
+        error_log("Method name must be a string\n");
+        return false;
     }
 
     if (!$parameters) {
-    $parameters = array();
+        $parameters = array();
     } else if (!is_array($parameters)) {
-    error_log("Parameters must be an array\n");
-    return false;
+        error_log("Parameters must be an array\n");
+        return false;
     }
 
     foreach ($parameters as $key => &$val) {
-    // encoding to JSON array parameters, for example reply_markup
-    if (!is_numeric($val) && !is_string($val)) {
-    $val = json_encode($val);
-    }
+        // encoding to JSON array parameters, for example reply_markup
+        if (!is_numeric($val) && !is_string($val)) {
+            $val = json_encode($val);
+        }
     }
     $url = API_URL . $method . '?' . http_build_query($parameters);
 
@@ -99,15 +99,15 @@ function apiRequest($method, $parameters) {
 function apiRequestJson($method, $parameters) {
 
     if (!is_string($method)) {
-    error_log("Method name must be a string\n");
-    return false;
+        error_log("Method name must be a string\n");
+        return false;
     }
 
     if (!$parameters) {
-    $parameters = array();
+        $parameters = array();
     } else if (!is_array($parameters)) {
-    error_log("Parameters must be an array\n");
-    return false;
+        error_log("Parameters must be an array\n");
+        return false;
 
     }
 
@@ -122,6 +122,29 @@ function apiRequestJson($method, $parameters) {
 
     return exec_curl_request($handle);
 }
+
+function dbcon(){
+
+    $hostname = ''; $dbname = ''; $username = ''; $password = ''; //!IMPORTANT: add your MySQL hostname, database, username and password
+
+    $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
+
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    return $dbh;
+
+}
+
+function get_session_id($chat_id){
+
+    $date = new DateTime(null, new DateTimeZone('Africa/Nairobi'));
+    $datetime = $date->format('YmdHms');
+
+    $sess = $chat_id.'_'.$datetime;
+
+    return $sess;
+}
+
 
 function processMessage($message) {
 
@@ -153,6 +176,18 @@ function processMessage($message) {
                 'one_time_keyboard' => true,
                 'resize_keyboard' => true)));
 
+        } else if ($text === "Water Source Mechanic" || $text === "Manager" || $text === "Chlorinated Water" || $text === "Water Source Quality") {
+
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "UP" followed by the ID i.e UP50'));
+
+        } else if (strpos($text, "UP") !== false || strpos($text, "up") !== false) {
+
+            $text_lc = strtolower($text); //to lower case
+
+            $wpid = ltrim($text_lc,'up');
+
+            include 'fusion_client.php';
+
         } else if ($text === "Subscribe") {
 
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'MWash Bot will update you about the condition of the water points around your area.'));
@@ -160,7 +195,7 @@ function processMessage($message) {
 
         } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false) {
 
-            $text_lc = strtolower($text);
+            $text_lc = strtolower($text); //to lower case
 
             $wpid = ltrim($text_lc,'wp');
 
@@ -211,24 +246,33 @@ function processMessage($message) {
 
             $wpid = ltrim($text,'SP');
 
-            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => $wpid));
+            $sess = get_session_id($chat_id);
+
+            dbcon()->exec("INSERT INTO `subscribers` (`water_point_id`, `session_chat_id`, `telegram_chat_id`,`province`,`district`,`chiefdom`,`phone_number`,`created_at`,`updated_at`) VALUES ('$wpid','$sess','$chat_id','0','0','0','0',now(),now())");
+
+            apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Awesome, we just require your phone number..'));
+
+        } else if (is_numeric($text)){
+
+            dbcon()->exec("UPDATE `subscribers` SET `phone_number` = '$text' WHERE `telegram_chat_id` = '$chat_id' AND `phone_number` = '0' ORDER BY `id` DESC LIMIT 1");
+
+            apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'Brilliant, you will now be receiving updates. Incase you want to engage me again just click start below..', 'reply_markup' => array('keyboard' => array(array('/start')),  'one_time_keyboard' => true, 'resize_keyboard' => true)));
 
         }
 
     } else {
 
         apiRequestJson("sendMessage", array('chat_id' => $chat_id, "text" => 'I understand only text messages', 'reply_markup' => array(
-        'keyboard' => array(array('/start')),
-        'one_time_keyboard' => true,
-        'resize_keyboard' => true)));
+            'keyboard' => array(array('/start')),
+            'one_time_keyboard' => true,
+            'resize_keyboard' => true)));
 
     }
 
 
 }
 
-define('WEBHOOK_URL', 'https://mwashbot.herokuapp.com/index.php');
-//https://api.telegram.org/bot343768089:AAHmS2wolDVlghf5IorunK0nFaCAC6G9N64/setWebhook?url=https://mwashbot.herokuapp.com/index.php
+define('WEBHOOK_URL', ''); //!IMPORTANT add URL
 
 if (php_sapi_name() == 'cli') {
     // if run from console, set or delete webhook
