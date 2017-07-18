@@ -123,6 +123,27 @@ function apiRequestJson($method, $parameters) {
     return exec_curl_request($handle);
 }
 
+function apiRequestImage($method, $parameters){
+
+    if (!is_string($method)) {
+        error_log("Method name must be a string\n");
+        return false;
+    }
+
+    $url = API_URL.$method.'?'.http_build_query($parameters);
+
+    $handle = curl_init();
+    curl_setopt($handle, CURLOPT_HTTPHEADER, array(
+        "Content-Type:multipart/form-data"
+    ));
+    curl_setopt($handle, CURLOPT_URL, $url);
+    curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($handle, CURLOPT_POSTFIELDS, $parameters);
+
+    return exec_curl_request($handle);
+
+}
+
 function dbcon(){
 
     $hostname = ''; $dbname = ''; $username = ''; $password = ''; //!IMPORTANT: add your MySQL hostname, database, username and password
@@ -235,7 +256,7 @@ function processMessage($message) {
             } else {
                 $qual_ans = 'Apparently the information about the water quality is not available.';
             }
-
+            
             apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
                 "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
