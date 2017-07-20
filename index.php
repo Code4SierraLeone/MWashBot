@@ -256,7 +256,8 @@ function processMessage($message) {
             } else {
                 $qual_ans = 'Apparently the information about the water quality is not available.';
             }
-            
+
+            apiRequestImage("sendPhoto", array('chat_id' => $chat_id, "photo" => new CURLFile("https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&center=37.530101,38.600062&zoom=14&size=640x400&key=AIzaSyAofXAMB8qhB20RQ1OQcPtCSLRdDKB1h78")));
             apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
                 "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
