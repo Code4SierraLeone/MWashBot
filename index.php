@@ -237,7 +237,7 @@ function processMessage($message) {
             }
 
             apiRequest("sendLocation", array('chat_id' => $chat_id, "latitude" => '43.4193408', "longitude" => '-2.7253832,16'));
-            apiRequest("sendMessage", array(
+                        apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
                 "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
             ));
