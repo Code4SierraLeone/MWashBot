@@ -201,7 +201,7 @@ function processMessage($message) {
 
             include 'fusion_client.php';
 
-            $selectQuery = "SELECT district,province,mechanic,manager,chlorine,qual FROM 1aHLU3Qqsl9X_W_BEvZaPn_dkNV8UtXtJPnKedgKB where cartodb_id = ".$wpid;
+            $selectQuery = "SELECT district,province,mechanic,manager,chlorine,qual,lon,lat FROM 1aHLU3Qqsl9X_W_BEvZaPn_dkNV8UtXtJPnKedgKB where cartodb_id = ".$wpid;
 
             $result = $service->query->sql($selectQuery);
 
@@ -211,6 +211,8 @@ function processMessage($message) {
             $manager = json_encode($result->getRows()[0][3]);
             $chlorine = json_encode($result->getRows()[0][4]);
             $qual = json_encode($result->getRows()[0][5]);
+            $lon = json_encode($result->getRows()[0][6]);
+            $lat = json_encode($result->getRows()[0][7]);
 
             if (trim($mechanic, '"') == 'Yes'){
                 $mech_ans = 'The mechanic is available near the water point to attend to any issue';
@@ -236,8 +238,8 @@ function processMessage($message) {
                 $qual_ans = 'Apparently the information about the water quality is not available.';
             }
 
-            apiRequest("sendLocation", array('chat_id' => $chat_id, "latitude" => '43.4193408', "longitude" => '-2.7253832,16'));
-                        apiRequest("sendMessage", array(
+            apiRequest("sendLocation", array('chat_id' => $chat_id, "latitude" => $lat, "longitude" => $lon));
+            apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
                 "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
             ));
