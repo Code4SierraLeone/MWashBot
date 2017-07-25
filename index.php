@@ -238,7 +238,7 @@ function processMessage($message) {
                 $qual_ans = 'Apparently the information about the water quality is not available.';
             }
 
-            apiRequest("sendLocation", array('chat_id' => $chat_id, "latitude" => $lat, "longitude" => $lon));
+            apiRequest("sendLocation", array('chat_id' => $chat_id, "latitude" => trim($lat, '"'), "longitude" => trim($lon, '"')));
             apiRequest("sendMessage", array(
                 'chat_id' => $chat_id,
                 "text" => 'The water point is located in ' .trim($district, '"'). ' district in ' .trim($province, '"'). ' province and its managed by ' .trim($manager, '"'). '. ' .$mech_ans . ' ' . $chlo_ans. ' ' .$qual_ans. ''
