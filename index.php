@@ -193,7 +193,7 @@ function processMessage($message) {
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'MWash Bot will update you about the condition of the water points around your area.'));
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "SP" followed by the ID i.e SP50'));
 
-        } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false) {
+        } else if (strpos($text, "WP") !== false || strpos($text, "wp") !== false || strpos($text, "Wp") !== false || strpos($text, "wP") !== false) {
 
             $text_lc = strtolower($text); //to lower case
 
