@@ -180,7 +180,7 @@ function processMessage($message) {
 
             apiRequest("sendMessage", array('chat_id' => $chat_id, "text" => 'Please provide the Water Point ID by typing the word "UP" followed by the ID i.e UP50'));
 
-        } else if (strpos($text, "UP") !== false || strpos($text, "up") !== false) {
+        } else if (strpos($text, "UP") !== false || strpos($text, "up") !== false || strpos($text, "Up") !== false || strpos($text, "uP") !== false) {
 
             $text_lc = strtolower($text); //to lower case
 
