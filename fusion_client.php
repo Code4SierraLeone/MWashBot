@@ -1,4 +1,6 @@
 <?php
+// composer.json pins google/apiclient 2.9.2 and services 0.130: upstream still supplies these FusionTables classes on PHP 8.3, so no copied legacy classes or classmap are needed.
+
 
 // composer autoload, loads the google api lib
 require_once('vendor/autoload.php');
